@@ -1,9 +1,11 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import NavBar from '@/components/NavBar.vue';
+import HeroSection from '@/components/HeroSection.vue';
+import HeroCat from '@/components/HeroCat.vue';
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+    <NavBar/>
+    <HeroSection/>
+    <HeroCat/>
 </template>
