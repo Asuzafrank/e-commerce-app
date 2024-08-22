@@ -17,10 +17,10 @@ const toggleMenu = () => {
         <img class="h-8" :src="logo" alt="">
       </div>
       <div class="hidden md:flex space-x-4">
-        <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded">Home</a>
-        <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded">About</a>
-        <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded">Services</a>
-        <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded">Contact</a>
+        <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Home</a>
+        <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">About</a>
+        <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Services</a>
+        <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Contact</a>
       </div>
       <button @click="toggleMenu" class="md:hidden text-white focus:outline-none">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

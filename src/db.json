@@ -1,0 +1,154 @@
+{
+  "products": [
+    {
+      "id": "12345",
+      "name": "Wireless Bluetooth Headphones",
+      "image": "https://cdn.pixabay.com/photo/2018/09/17/14/27/headphones-3683983_1280.jpg",
+      "description": "High-quality wireless Bluetooth headphones with noise cancellation and long battery life.",
+      "price": 89.99,
+      "category": "Electronics",
+      "stock": 150,
+      "rating": 4.5,
+      "specifications": {
+        "batteryLife": "20 hours",
+        "weight": "250 grams",
+        "connectivity": "Bluetooth 5.0",
+        "color": "Black"
+      }
+    },
+    {
+      "id": "54321",
+      "name": "Portable Blender",
+      "image": "https://cdn.pixabay.com/photo/2011/12/05/14/49/blender-10934_1280.jpg",
+      "description": "Compact and powerful portable blender perfect for smoothies and shakes on the go.",
+      "price": 29.99,
+      "category": "Kitchen Appliances",
+      "stock": 200,
+      "rating": 4.8,
+      "specifications": {
+        "batteryLife": "15 blends",
+        "weight": "350 grams",
+        "capacity": "400 ml",
+        "color": "Red"
+      }
+    },
+    {
+      "id": "67890",
+      "name": "Smart Fitness Watch",
+      "image": "https://cdn.pixabay.com/photo/2022/01/24/18/06/smart-watch-6964296_1280.jpg",
+      "description": "A stylish smartwatch with fitness tracking, heart rate monitoring, and customizable watch faces.",
+      "price": 149.99,
+      "category": "Wearables",
+      "stock": 75,
+      "rating": 2.2,
+      "specifications": {
+        "batteryLife": "7 days",
+        "weight": "45 grams",
+        "connectivity": "Bluetooth 5.1",
+        "color": "Silver"
+      }
+    }
+  ],
+  "reviews": [
+    {
+      "reviewId": "r1",
+      "productId": "12345",
+      "userId": "u001",
+      "reviewerName": "Alice Johnson",
+      "rating": 5,
+      "comment": "Excellent headphones! The sound quality is amazing and the noise cancellation is top-notch.",
+      "date": "2024-08-15"
+    },
+    {
+      "reviewId": "r2",
+      "productId": "12345",
+      "userId": "u002",
+      "reviewerName": "Bob Smith",
+      "rating": 4,
+      "comment": "Good value for the price. Comfortable to wear, but the battery life could be better.",
+      "date": "2024-08-16"
+    },
+    {
+      "reviewId": "r3",
+      "productId": "12345",
+      "userId": "u003",
+      "reviewerName": "Charlie Davis",
+      "rating": 3,
+      "comment": "Average headphones. The sound is decent, but they feel a bit bulky.",
+      "date": "2024-08-17"
+    },
+    {
+      "reviewId": "r1",
+      "productId": "54321",
+      "userId": "u007",
+      "reviewerName": "Liam Brown",
+      "rating": 5,
+      "comment": "Absolutely love this blender! Perfect for making quick smoothies and easy to clean.",
+      "date": "2024-08-11"
+    },
+    {
+      "reviewId": "r2",
+      "productId": "54321",
+      "userId": "u008",
+      "reviewerName": "Olivia Martinez",
+      "rating": 4,
+      "comment": "Very handy and efficient. The battery life is good, but it could use a bit more power.",
+      "date": "2024-08-13"
+    },
+    {
+      "reviewId": "r3",
+      "productId": "54321",
+      "userId": "u009",
+      "reviewerName": "Noah Taylor",
+      "rating": 4,
+      "comment": "Works well for the price. Great for travel, but a bit noisy.",
+      "date": "2024-08-15"
+    },
+    {
+      "reviewId": "r1",
+      "productId": "67890",
+      "userId": "u004",
+      "reviewerName": "Sophia Lee",
+      "rating": 5,
+      "comment": "Great watch! The fitness tracking is accurate, and the battery lasts a full week.",
+      "date": "2024-08-10"
+    },
+    {
+      "reviewId": "r2",
+      "productId": "67890",
+      "userId": "u005",
+      "reviewerName": "James Carter",
+      "rating": 4,
+      "comment": "Good smartwatch with plenty of features. The interface could be more intuitive.",
+      "date": "2024-08-12"
+    },
+    {
+      "reviewId": "r3",
+      "productId": "67890",
+      "userId": "u006",
+      "reviewerName": "Emma Wilson",
+      "rating": 3,
+      "comment": "Decent watch, but it’s a bit bulky for my taste. Fitness tracking is okay.",
+      "date": "2024-08-14"
+    }
+  ],
+  "cart": [
+    {
+      "id": "67890",
+      "name": "Smart Fitness Watch",
+      "image": "https://cdn.pixabay.com/photo/2022/01/24/18/06/smart-watch-6964296_1280.jpg",
+      "description": "A stylish smartwatch with fitness tracking, heart rate monitoring, and customizable watch faces.",
+      "price": 149.99,
+      "category": "Wearables",
+      "stock": 75,
+      "rating": 2.2,
+      "specifications": {
+        "batteryLife": "7 days",
+        "weight": "45 grams",
+        "connectivity": "Bluetooth 5.1",
+        "color": "Silver"
+      },
+      "quantity": 4
+    }
+  ]
+}
