@@ -3,6 +3,8 @@ import axios from 'axios';
 import { reactive, onMounted, computed, ref, defineProps } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase/config';
 
 
 
@@ -66,8 +68,14 @@ const fetchComments = async() => {
 
 const fetchProduct = async() => {
     try{
-        let response = await axios.get(`http://localhost:5000/products/${productId}`)
-        state.product = response.data
+        // let response = await axios.get(`http://localhost:5000/products/${productId}`)
+        // state.product = response.data
+        const productdocRef = doc(db, "products", productId);
+        const productDocSnap = await getDoc(productdocRef)
+
+        if(productDocSnap.exists()){
+            state.product = productDocSnap.data()
+        }
         
     }catch(error){
         console.log('Error Fetching Product', error)

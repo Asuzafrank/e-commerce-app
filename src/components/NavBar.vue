@@ -19,7 +19,7 @@ const toggleMenu = () => {
       <div class="hidden md:flex space-x-4">
         <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Home</a>
         <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">About</a>
-        <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Services</a>
+        <router-link to="/add" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Add Product</router-link>
         <a href="#" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Contact</a>
       </div>
       <button @click="toggleMenu" class="md:hidden text-white focus:outline-none">
@@ -31,7 +31,7 @@ const toggleMenu = () => {
     <div v-if="isOpenMenu" class="md:hidden  text-white ">
       <a href="#" class="block hover:bg-blue-700 px-4 py-2">Home</a>
       <a href="#" class="block hover:bg-blue-700 px-4 py-2">About</a>
-      <a href="#" class="block hover:bg-blue-700 px-4 py-2">Services</a>
+      <router-link to="/add" class="block hover:bg-blue-700 px-4 py-2">Services</router-link>
       <a href="#" class="block hover:bg-blue-700 px-4 py-2">Contact</a>
     </div>
   </nav>

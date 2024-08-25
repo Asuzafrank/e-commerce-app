@@ -10,7 +10,8 @@ export default {
         sans:['poppins', 'sans-serif']
       },
       gridTemplateColumns:{
-        '50/50': '48% 50%'
+        '50/50': '48% 50%',
+        '60/40': '60% 38%'
       },
       height: {
         '70': '25.5rem', // Customize this value as needed
