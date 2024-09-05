@@ -1,6 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { reactive, onMounted, computed, ref, defineProps } from 'vue';
+import router from '@/router';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
 import { addDoc, doc, getDoc, serverTimestamp, collection, getDocs, orderBy, query, where, updateDoc, setDoc} from 'firebase/firestore';
@@ -22,6 +23,7 @@ const state = reactive({
 const addToCart = async (product) => {
     if (!uid.value) {
         toast.error("You must be logged in to add items to your cart");
+        router.push('/login')
         return;
     }
     try {

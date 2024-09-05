@@ -40,7 +40,7 @@ onMounted(() => {
     <HeroSection/>
     <HeroCat/>
     <h1 class="mt-5 mb-5 grey-qo-regular text-6xl underline text-center">Our Latest Products</h1>
-    <ProductListings :products="state.products" />
+    <ProductListings :products="state.products.slice(0, 3)" />
 </template>
 
 

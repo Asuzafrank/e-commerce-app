@@ -82,6 +82,9 @@ const signUp = async () => {
       </div>
       <button class="tracking-widest text-sm bg-sky-600 text-white rounded-md hover:bg-purple-400 my-3 p-3 w-full">SignUp</button>
       </form>
+      <div class="flex space-x-2">
+        <p class="text-sm">Already Have An Account</p><router-link to="/login" class="text-sm text-blue-500">Login</router-link>
+      </div>
      
     </div>
   </section>

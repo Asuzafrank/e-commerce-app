@@ -99,5 +99,5 @@ const cartTotal = computed(() => {
      
     </div>
     
-    <h1>{{ totalCostItems }}</h1>
+   
 </template>

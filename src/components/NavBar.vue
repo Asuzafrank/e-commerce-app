@@ -18,18 +18,28 @@ const isActiveLink = (routepath) => {
 const uid = ref(null)
 const hasAddProduct = ref(false)
 const specificUserId = 'P8kFYwcvwsWC7ZRcbY09L9rSc9F2';
-const checkUserId = async(uid) => {
-  if(!uid) return false;
 
-  const userDocRef = doc(db, 'users', uid);
-  const userDoc = await getDoc(userDocRef)
-  
-  if(userDoc.exists()){
-    const userData = userDoc.data()
-    return userData.uid === specificUserId
+const checkUserId = async(uid) => {
+  if (!uid) return false;
+
+  try {
+    const userDocRef = doc(db, 'users', uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      console.log('Fetched user data:', userData); // Debug line
+      return userData.uid.trim() === specificUserId.trim();
+    } else {
+      console.log('User document does not exist'); // Debug line
+      return false;
+    }
+  } catch (error) {
+    console.error('Error fetching user document:', error); // Debug line
+    return false;
   }
-  return false
-}
+};
+
 
 const logout = async () => {
   await signOut(auth)
@@ -46,7 +56,9 @@ onMounted(() => {
   onAuthStateChanged(auth, async(user) => {
     if(user){
       uid.value = user.uid
+      console.log('Authenticated user ID:', uid.value);
       hasAddProduct.value = await checkUserId(user.uid)
+      console.log('Has add product permission:', hasAddProduct.value); 
     }else{
       console.log('No user found')
     }
@@ -65,7 +77,7 @@ onMounted(() => {
         <router-link to="/"  :class="[isActiveLink('/') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded']">Home</router-link>
         <router-link to="/all"  :class="[isActiveLink('/all') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded']">view products</router-link>
         
-          <router-link v-if="hasAddProduct" to="/add" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Add Product</router-link>
+          <router-link to="/add" class="text-black hover:bg-blue-700 px-3 py-2 rounded">Add Product</router-link>
         
         
         <router-link to="/cart"  :class="[isActiveLink('/cart') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded']">cart</router-link>

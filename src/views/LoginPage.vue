@@ -56,6 +56,10 @@ const login = async() => {
       </div>
       <button class="tracking-widest text-sm bg-sky-600 text-white rounded-md hover:bg-purple-400 my-3 p-3 w-full">login</button>
       </form>
+      <div class="flex space-x-2">
+        <p class="text-sm">Don't Have An Account</p><router-link to="/register" class="text-sm text-blue-500">Sign Up</router-link>
+      </div>
+      
      
     </div>
   </section>
