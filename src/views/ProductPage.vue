@@ -3,8 +3,11 @@ import axios from 'axios';
 import { reactive, onMounted, computed, ref, defineProps } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import { doc, getDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, serverTimestamp, collection, getDocs, orderBy, query, where, updateDoc, setDoc} from 'firebase/firestore';
 import { db } from '@/firebase/config';
+import { auth } from '@/firebase/config';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 
 
@@ -17,21 +20,38 @@ const state = reactive({
 })
 
 const addToCart = async (product) => {
-   
-    let existingProduct = state.cart.find(item => item.id === product.id)
-    if(existingProduct){
-        existingProduct.quantity++
-        await axios.patch(`http://localhost:5000/cart/${existingProduct.id}`, { quantity:existingProduct.quantity })
-        toast.success("item Quantity updated successfully")
-    }else{ 
-        let response = await axios.post('http://localhost:5000/cart', {...product, quantity:quantity.value});
-        state.cart.push(response.data)
-        toast.success("Item added to cart")
+    if (!uid.value) {
+        toast.error("You must be logged in to add items to your cart");
+        return;
     }
-    
+    try {
+        console.log(`User ID: ${uid.value}, Product ID: ${productId}`);
+        const cartRef = collection(db, 'users', uid.value, 'cart');
+        const productRef = doc(cartRef, productId);
+        const productDoc = await getDoc(productRef);
 
-    
+        if (productDoc.exists()) {
+            // Item exists in the cart, update the quantity
+            const existingProduct = productDoc.data();
+            await updateDoc(productRef, {
+                quantity: existingProduct.quantity + quantity.value
+            });
+            toast.success("Item quantity updated successfully");
+        } else {
+            // Item does not exist in the cart, add it
+            await setDoc(productRef, {
+                ...product,
+                quantity: quantity.value,
+                addedAt: serverTimestamp()
+            });
+            toast.success("Item added to cart");
+        }
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        toast.error("Failed to add item to cart. Please try again.");
+    }
 };
+
 
 
 const generatedStars = computed(() => {
@@ -55,13 +75,64 @@ const route = useRoute()
 const productId = route.params.id
 
 const fetchComments = async() => {
+    const commentRef = collection(db, "reviews");
+    const commentQuery = query(commentRef, where("productId", "==", productId), orderBy("date", "desc"))
+    const commentShot = await getDocs(commentQuery);
+    const commentList = await Promise.all(commentShot.docs.map(async(docSnapShot) => {
+        const reviewData = docSnapShot.data();
+        const userRef = doc(db, "users", reviewData.userId);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+                console.log(`User data for ID ${reviewData.userId}:`, userDoc.data()); // Debugging statement
+            } else {
+                console.log(`No user document found for ID ${reviewData.userId}`); // Debugging statement
+            }
+        const userData = userDoc.exists() ? userDoc.data() : { username : "unknown" };
+        return{
+            id:docSnapShot.id,
+            ...reviewData,
+            reviewerName:userData.username
+        }
+
+    } ))
+    state.reviews = commentList
+
+}
+
+const uid = ref(null);
+
+onMounted(() => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            uid.value = user.uid;
+            console.log(uid.value);
+        }
+    });
+    fetchProduct();
+    fetchComments();
+});
+const commentreview = ref('');
+const postComments = async() => {
     try{
-        let res = await axios.get('http://localhost:5000/reviews')
-        state.reviews = res.data.filter(review => review.productId === productId)
+        if(!uid.value){
+            console.log('user is not authenticated')
+            return;
+        }
+        // let res = await axios.get('http://localhost:5000/reviews')
+        // state.reviews = res.data.filter(review => review.productId === productId)
+        const reviewRef = await addDoc(collection(db, "reviews"), {
+            comment:commentreview.value,
+            date:serverTimestamp(),
+            productId:productId,
+            userId:uid.value
+        });
+        console.log('Document written with ', reviewRef.id)
+        await fetchComments();
+        commentreview.value = ''; 
         
         
     }catch(error){
-        console.log('Error fetching Comments', error)
+        console.log('Error posting Comments', error)
     }
     
 }
@@ -83,10 +154,7 @@ const fetchProduct = async() => {
     
 
 }
-onMounted(() => {
-    fetchProduct()
-    fetchComments()
-})
+
 
 </script>
 <template>
@@ -98,10 +166,10 @@ onMounted(() => {
                 <img :src="state.product.image" class="w-full h-70 object-cover rounded-lg mx-4" alt="">
 
                 <div class="reviews mt-6 p-6 bg-gray-100 rounded-lg shadow-md mx-4 w-full">
-                    <form action="">
+                    <form @submit.prevent="postComments">
                         <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200">
                             <label for="comment" class="sr-only">Your Comment</label>
-                            <input type="text" name="comment" id="comment" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
+                            <input v-model="commentreview" type="text" name="comment" id="comment" class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none"
                             placeholder="Write a comment..." required>
                         </div>
                         <button class="inline-flex items-center rounded-lg text-xs bg-blue-400 text-white px-4 py-2.5">Post Comment</button>
@@ -117,7 +185,7 @@ onMounted(() => {
                                         {{ review.reviewerName }}
                                     </p>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">
-                                        <time pubdate datetime="2022-02-08" title="February 8th, 2022">{{ review.date }}</time>
+                                        <time pubdate datetime="2022-02-08" title="February 8th, 2022">{{ review.date.toDate().toDateString() }}</time>
                                     </p>
                                 </div>
                             </footer>
@@ -136,7 +204,7 @@ onMounted(() => {
             </div>
            <!-- HTML -->
 <section class="section2 mx-10">
-    <div class="naming mb-4">
+    <div class="naming mb-4 sm:mt-8">
         <h3 class="text-md font-bold text-gray-800">{{ state.product.category }}</h3>
         <h3 class="text-yellow-500 font-extrabold text-2xl">{{ state.product.name }}</h3>
     </div>
@@ -167,7 +235,31 @@ onMounted(() => {
         <button class="bg-sky-600 text-white px-7 py-1 rounded-xl mr-4 hover:bg-yellow-50 hover:text-black">Buy Now</button>
         <button @click="addToCart(state.product)" class=" text-sky-600 px-4 py-1 rounded-xl border border-sky-600 hover:bg-slate-400 hover:text-white ">Add to Cart</button>
     </div>
+
+    <!-- <div class="specifications bg-white p-6 rounded-lg shadow-md border border-gray-200 m-3 h-64">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Specifications</h3>
+    <ul class="list-disc list-inside space-y-2 text-gray-600">
+        <li class="flex items-center">
+            <span class="font-semibold text-gray-700 w-36">Color:</span>
+            <span>{{ state.product.specifications.color }}</span>
+        </li>
+        <li class="flex items-center">
+            <span class="font-semibold text-gray-700 w-36">Battery Life:</span>
+            <span>{{ state.product.specifications.batteryLife }}</span>
+        </li>
+        <li class="flex items-center">
+            <span class="font-semibold text-gray-700 w-36">Weight:</span>
+            <span>{{ state.product.specifications.weight }}</span>
+        </li>
+        <li class="flex items-center">
+            <span class="font-semibold text-gray-700 w-36">Connectivity:</span>
+            <span>{{ state.product.specifications.connectivity }}</span>
+        </li>
+    </ul>
+</div> -->
+
 </section>
+    
 
         </div>
     </section>

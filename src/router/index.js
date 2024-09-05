@@ -6,6 +6,7 @@ import Register from '@/views/Register.vue'
 import NotFoundPage from '@/views/NotFoundPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 import AddProductPage from '@/views/AddProductPage.vue'
+import AllProducts from '@/views/AllProducts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/add',
       name: 'addProduct',
       component: AddProductPage
+    },
+    {
+      path: '/all',
+      name: 'AllProducts',
+      component: AllProducts
     },
     {
       path: '/:catchAll(.*)',

@@ -1,28 +1,70 @@
 <script setup>
-import { defineProps, ref, computed, watch} from 'vue';
+import { defineProps, ref, computed, watch, onMounted} from 'vue';
 import axios from 'axios';
+import { collection, doc, getDoc, increment, updateDoc } from 'firebase/firestore';
+import { db, auth } from '@/firebase/config';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 const props = defineProps({
     cartitem:Object,
     required:true
 })
-
+onMounted(() => {
+    onAuthStateChanged(auth, (user) => {
+        if(user){
+            uid.value = user.uid
+        }else{
+            uid.value = null
+        }
+        
+    })
+})
+const uid = ref(null)
 const quantity = ref(props.cartitem.quantity)
 
 const increaseQuantity = async() => { 
+    if(!uid.value) return;
+    try{
+        const cartRef = collection(db, "users", uid.value, 'cart')
+        const productRef = doc(cartRef, props.cartitem.id)
+        await updateDoc(productRef, {
+            quantity:increment(1)
+    })
     quantity.value++
-    await axios.patch(`http://localhost:5000/cart/${props.cartitem.id}`, { quantity:quantity.value })
+    }catch(error){
+        console.log('Error increasing quantity of item' , error)
+    }
+   
+    // await axios.patch(`http://localhost:5000/cart/${props.cartitem.id}`, { quantity:quantity.value })
 
 }
 
 const decreaseQuantity = async() => {
-    quantity.value--
-    await axios.patch(`http://localhost:5000/cart/${props.cartitem.id}`, { quantity:quantity.value })
+    if(!uid.value) return;
+    
+    if(quantity.value > 1){
+        try{
+        
+        const cartRef = collection(db, "users", uid.value, "cart")
+        const productRef = doc(cartRef, props.cartitem.id)
+        await updateDoc(productRef, {
+            quantity:increment(-1)
+        })
+        quantity.value--
+    }catch(error){
+        console.log('Error decreasing product item')
+    }
+    }
+    
+    // await axios.patch(`http://localhost:5000/cart/${props.cartitem.id}`, { quantity:quantity.value })
 }
 
 const totalOneItemPrice = computed(() => {
     return (quantity.value * props.cartitem.price).toFixed(2)
 })
+
+
 
 
 
@@ -56,4 +98,5 @@ const totalOneItemPrice = computed(() => {
             </div>
         </div>
     </section>
+   
 </template>
