@@ -90,10 +90,12 @@ onMounted(() => {
       </button>
     </div>
     <div v-if="isOpenMenu" class="md:hidden  text-white ">
-      <a href="#" class="block hover:bg-blue-700 px-4 py-2">Home</a>
-      <a href="#" class="block hover:bg-blue-700 px-4 py-2">About</a>
-      <router-link to="/add" class="block hover:bg-blue-700 px-4 py-2">Add Product</router-link>
-      <a href="#" class="block hover:bg-blue-700 px-4 py-2">Contact</a>
+      <router-link to="/"  :class="[isActiveLink('/') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded', 'block']">Home</router-link>
+      <router-link to="/all"  :class="[isActiveLink('/all') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded', 'block']">view products</router-link>
+      <router-link to="/add"  :class="[isActiveLink('/add') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded', 'block']">Add products</router-link>
+      
+      <router-link to="/cart"  :class="[isActiveLink('/cart') ? 'bg-blue-400': 'text-black', 'hover:bg-blue-700', 'px-3', 'py-2', 'rounded', 'block']">cart</router-link>
+      <button @click="logout" class="text-black hover:bg-blue-700 px-3 py-2 rounded">logout</button>
     </div>
   </nav>
 </template>
